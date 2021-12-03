@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>An intro to DVC</title>
+<meta name="author" content="Sebastian Callh"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="/home/sebastian/.emacs.d/.local/straight/build-28.0.50/revealjs/dist/reveal.css"/>
+
+<link rel="stylesheet" href="/home/sebastian/.emacs.d/.local/straight/build-28.0.50/revealjs/dist/theme/moon.css" id="theme"/>
+
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h2>An intro to DVC</h2>
+Sebastian Callh
+</section>
+
+<section>
+<section id="slide-1">
+<h2 id="1"><span class="section-number-2">1.</span> Software traceability</h2>
+<p>
+Before we dig into DVC, let&rsquo;s talk traceability
+</p>
+
+</section>
+<section id="slide-1-1">
+<h3 id="1-1"><span class="section-number-3">1.1.</span> Traceablility is pretty important</h3>
+<ul>
+<li>Why did this blow up i production?</li>
+<li>How has this module changed over time?</li>
+<li>&ldquo;O sh*t! Rollback, rollback!&rdquo;</li>
+
+</ul>
+
+</section>
+<section id="slide-1-2">
+<h3 id="1-2"><span class="section-number-3">1.2.</span> VCS is all you need</h3>
+
+<div id="org1d492d2" class="figure">
+<p><img src="https://cdn.freebiesupply.com/logos/large/2x/git-icon-logo-png-transparent.png" alt="git-icon-logo-png-transparent.png" />
+</p>
+</div>
+<p style="font-size: 18px; margin-top: -50px; margin-left: -570px;"">Image from freebiesupply.com</p>
+
+</section>
+<section id="slide-1-3">
+<h3 id="1-3"><span class="section-number-3">1.3.</span> VCS limitations</h3>
+<p>
+What if your project comprises more than source code?
+</p>
+
+<ul>
+<li>Datasets</li>
+<li>ML models</li>
+<li>Binaries</li>
+<li><b>Literally anything</b></li>
+
+</ul>
+
+</section>
+<section id="slide-1-4">
+<h3 id="1-4"><span class="section-number-3">1.4.</span> VCS limitations</h3>
+<ul>
+<li>VSCs are not made for binaries</li>
+<li>Diffs only work for source code</li>
+<li>Cloud providers limit repository sizes</li>
+<li>Large files slow down workflows</li>
+
+</ul>
+
+
+</section>
+</section>
+<section>
+<section id="slide-2">
+<h2 id="2"><span class="section-number-2">2.</span> Extending VCS</h2>
+<p>
+Let us figure out a solution to these pathologies!
+</p>
+
+</section>
+<section id="slide-2-1">
+<h3 id="2-1"><span class="section-number-3">2.1.</span> Step one</h3>
+
+<div id="org74699e2" class="figure">
+<p><img src="./figures/dvc-1.drawio.svg" alt="dvc-1.drawio.svg" class="org-svg" />
+</p>
+</div>
+
+</section>
+<section id="slide-2-2">
+<h3 id="2-2"><span class="section-number-3">2.2.</span> Step two</h3>
+
+<div id="orge31b31c" class="figure">
+<p><img src="./figures/dvc-2.drawio.svg" alt="dvc-2.drawio.svg" class="org-svg" />
+</p>
+</div>
+
+</section>
+<section id="slide-2-3">
+<h3 id="2-3"><span class="section-number-3">2.3.</span> Step three</h3>
+
+<div id="org7fb9895" class="figure">
+<p><img src="./figures/dvc-3.drawio.svg" alt="dvc-3.drawio.svg" class="org-svg" />
+</p>
+</div>
+
+</section>
+<section id="slide-2-4">
+<h3 id="2-4"><span class="section-number-3">2.4.</span> We just invented DVC!</h3>
+
+<div id="org85dbd1b" class="figure">
+<p><img src="https://dvc.org/static/9cccd49a995845bdc6466caa17ad3bad/ab90f/model-sharing-digram.png" alt="model-sharing-digram.png" />
+</p>
+</div>
+<p style="font-size: 18px; margin-top: -50px; margin-left: -570px;"">Image from dvc.org</p>
+
+
+</section>
+</section>
+<section>
+<section id="slide-3">
+<h2 id="3"><span class="section-number-2">3.</span> DVC</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+</section>
+<section id="slide-3-1">
+<h3 id="3-1"><span class="section-number-3">3.1.</span> What is DVC?</h3>
+<ul>
+<li>Sits on top of Git</li>
+<li>CLI tool to
+<ul>
+<li>add artefact &rsquo;pointer files&rsquo;</li>
+<li>push/pull to remote storage</li>
+
+</ul></li>
+<li>Cache functionality</li>
+<li>Pipelines to model dependencies between artefacts</li>
+
+</ul>
+
+</section>
+<section id="slide-3-2">
+<h3 id="3-2"><span class="section-number-3">3.2.</span> Versioning artefacts</h3>
+<div class="org-src-container">
+
+<pre class="src src-bash">dvc add model.pkl                 <span style="color: #6f7787;"># </span><span style="color: #6f7787;">create 'pointer files'</span>
+dvc push                          <span style="color: #6f7787;"># </span><span style="color: #6f7787;">push artefacts to remote storage</span>
+<span style="color: #8FBCBB;">git</span> add model.pkl.dvc             <span style="color: #6f7787;"># </span><span style="color: #6f7787;">add pointer file to </span><span style="color: #6f7787;">git</span>
+<span style="color: #8FBCBB;">git</span> commit -m <span style="color: #A3BE8C;">'&#128293;lit model&#128293;&#128076;'</span>   <span style="color: #6f7787;"># </span><span style="color: #6f7787;">business as usual</span>
+<span style="color: #8FBCBB;">git</span> push
+</pre>
+</div>
+
+</section>
+<section id="slide-3-3">
+<h3 id="3-3"><span class="section-number-3">3.3.</span> Pipelines</h3>
+<p>
+Nice! But what if we have dependencies between artefacts?
+</p>
+
+</section>
+<section id="slide-3-4">
+<h3 id="3-4"><span class="section-number-3">3.4.</span> Pipelines example</h3>
+<ul>
+<li>Consider the following steps</li>
+<li>1. Train model</li>
+<li>2. Run model over data</li>
+<li>3. Compute metrics from predictions</li>
+<li>4. Produce plots</li>
+
+</ul>
+
+</section>
+<section id="slide-3-5">
+<h3 id="3-5"><span class="section-number-3">3.5.</span> Pipelines spec</h3>
+<div class="org-src-container">
+
+<pre class="src src-yaml"><span style="color: #D8DEE9;">stages</span>:
+  <span style="color: #D8DEE9;">train_model</span>:
+    <span style="color: #D8DEE9;">cmd</span>: python train.py
+    <span style="color: #D8DEE9;">deps</span>:
+      - train.py
+    <span style="color: #D8DEE9;">params</span>:
+      - train.learning_rate
+    <span style="color: #D8DEE9;">outs</span>:
+      - model.pkl
+
+  <span style="color: #D8DEE9;">eval_model</span>:
+    <span style="color: #D8DEE9;">cmd</span>: python eval.py --model model.pkl --out preds.csv
+    <span style="color: #D8DEE9;">deps</span>:
+      - eval.py
+      - model.pkl
+    <span style="color: #D8DEE9;">outs</span>:
+      - preds.csv
+<span style="color: #6f7787;">...</span>
+</pre>
+</div>
+
+</section>
+<section id="slide-3-6">
+<h3 id="3-6"><span class="section-number-3">3.6.</span> Pipeline run</h3>
+<div class="org-src-container">
+
+<pre class="src src-bash">dvc repro <span style="color: #6f7787;"># </span><span style="color: #6f7787;">reproduces results of the pipeline</span>
+</pre>
+</div>
+
+
+</section>
+</section>
+<section>
+<section id="slide-4">
+<h2 id="4"><span class="section-number-2">4.</span> In summary</h2>
+<ul>
+<li>DVC solves the traceability issue by
+<ul>
+<li>attaching artefacts to your Git commits</li>
+<li>structuring and running your code in pipelines</li>
+<li>integrating reporting with CI/CD</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-5">
+<h2 id="5"><span class="section-number-2">5.</span> Features not covered</h2>
+<ul>
+<li>Experiment tracking, compare pipeline metrics</li>
+<li>Data registries, package artefacts as a reusable module</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-6">
+<h2 id="6"><span class="section-number-2">6.</span> That&rsquo;s all folks!</h2>
+<p>
+Thoughts/questions/comments?
+</p>
+</section>
+</section>
+</div>
+</div>
+<script src="/home/sebastian/.emacs.d/.local/straight/build-28.0.50/revealjs/dist/reveal.js"></script>
+<script src="/home/sebastian/.emacs.d/.local/straight/build-28.0.50/revealjs/plugin/markdown/markdown.js"></script>
+<script src="/home/sebastian/.emacs.d/.local/straight/build-28.0.50/revealjs/plugin/notes/notes.js"></script>
+<script src="/home/sebastian/.emacs.d/.local/straight/build-28.0.50/revealjs/plugin/search/search.js"></script>
+<script src="/home/sebastian/.emacs.d/.local/straight/build-28.0.50/revealjs/plugin/zoom/zoom.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: true,
+overview: true,
+
+transition: 'convex',
+transitionSpeed: 'default',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+});
+</script>
+</body>
+</html>
