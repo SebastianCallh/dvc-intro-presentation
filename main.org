@@ -1,0 +1,119 @@
+#+TITLE: An intro to DVC
+#+OPTIONS: toc:nil
+#+REVEAL_THEME: moon
+#+REVEAL_TITLE_SLIDE: <h2>%t</h2>
+#+REVEAL_TITLE_SLIDE: %a
+#+REVEAL_EXTRA_CSS: style.css
+
+* Software traceability
+Before we dig into DVC, let's talk traceability
+
+** Traceablility is pretty important
+- Why did this blow up i production?
+- How has this module changed over time?
+- "O sh*t! Rollback, rollback!"
+
+** VCS is all you need
+https://cdn.freebiesupply.com/logos/large/2x/git-icon-logo-png-transparent.png
+#+REVEAL_HTML: <p style="font-size: 18px; margin-top: -50px; margin-left: -570px;"">Image from freebiesupply.com</p>
+
+** VCS limitations
+What if your project comprises more than source code?
+
+- Datasets
+- ML models
+- Binaries
+- *Literally anything*
+
+** VCS limitations
+- VSCs are not made for binaries
+- Diffs only work for source code
+- Cloud providers limit repository sizes
+- Large files slow down workflows
+
+
+* Extending VCS
+Let us figure out a solution to these pathologies!
+
+** Step one
+[[./figures/dvc-1.drawio.svg]]
+
+** Step two
+[[./figures/dvc-2.drawio.svg]]
+
+** Step three
+[[./figures/dvc-3.drawio.svg]]
+
+** We just invented DVC!
+[[https://dvc.org/static/9cccd49a995845bdc6466caa17ad3bad/ab90f/model-sharing-digram.png]]
+#+REVEAL_HTML: <p style="font-size: 18px; margin-top: -50px; margin-left: -570px;"">Image from dvc.org</p>
+
+
+* DVC
+** What is DVC?
+- Sits on top of Git
+- CLI tool to
+  - add artefact 'pointer files'
+  - push/pull to remote storage
+- Cache functionality
+- Pipelines to model dependencies between artefacts
+
+** Versioning artefacts
+#+begin_src bash
+dvc add model.pkl                 # create 'pointer files'
+dvc push                          # push artefacts to remote storage
+git add model.pkl.dvc             # add pointer file to git
+git commit -m '🔥lit model🔥👌'   # business as usual
+git push
+#+end_src
+
+** Pipelines
+Nice! But what if we have dependencies between artefacts?
+
+** Pipelines example
+- Consider the following steps
+1. 1. Train model
+2. 2. Run model over data
+3. 3. Compute metrics from predictions
+4. 4. Produce plots
+
+** Pipelines spec
+#+begin_src yaml
+stages:
+  train_model:
+    cmd: python train.py
+    deps:
+      - train.py
+    params:
+      - train.learning_rate
+    outs:
+      - model.pkl
+
+  eval_model:
+    cmd: python eval.py --model model.pkl --out preds.csv
+    deps:
+      - eval.py
+      - model.pkl
+    outs:
+      - preds.csv
+...
+#+end_src
+
+** Pipeline run
+#+begin_src bash
+dvc repro # reproduces results of the pipeline
+#+end_src
+
+
+* In summary
+- DVC solves the traceability issue by
+  - attaching artefacts to your Git commits
+  - structuring and running your code in pipelines
+  - integrating reporting with CI/CD
+
+* Features not covered
+- Experiment tracking, compare pipeline metrics
+- Data registries, package artefacts as a reusable module
+
+* That's all folks!
+Thoughts/questions/comments?
