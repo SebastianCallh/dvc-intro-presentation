@@ -63,7 +63,7 @@ Let us figure out a solution to these pathologies!
 dvc add model.pkl                 # create 'pointer files'
 dvc push                          # push artefacts to remote storage
 git add model.pkl.dvc             # add pointer file to git
-git commit -m '🔥lit model🔥👌'   # business as usual
+git commit -m '🔥lit model🔥👌'    # business as usual
 git push
 #+end_src
 
@@ -101,9 +101,13 @@ stages:
 
 ** Pipeline run
 #+begin_src bash
-dvc repro # reproduces results of the pipeline
+dvc repro                         # reproduces results of the pipeline
+dvc add lock.dvc                  # add 'pipeline pointer file'
+dvc push                          # push artefacts to remote storage
+git add model.pkl.dvc             # add pointer file to git
+git commit -m '🔥🔥🔥🔥🔥👌'        # professional etc
+git push
 #+end_src
-
 
 * In summary
 - DVC solves the traceability issue by

@@ -42,7 +42,7 @@ Before we dig into DVC, let&rsquo;s talk traceability
 <section id="slide-1-2">
 <h3 id="1-2"><span class="section-number-3">1.2.</span> VCS is all you need</h3>
 
-<div id="org1d492d2" class="figure">
+<div id="org3a73b47" class="figure">
 <p><img src="https://cdn.freebiesupply.com/logos/large/2x/git-icon-logo-png-transparent.png" alt="git-icon-logo-png-transparent.png" />
 </p>
 </div>
@@ -88,7 +88,7 @@ Let us figure out a solution to these pathologies!
 <section id="slide-2-1">
 <h3 id="2-1"><span class="section-number-3">2.1.</span> Step one</h3>
 
-<div id="org74699e2" class="figure">
+<div id="org06b36f0" class="figure">
 <p><img src="./figures/dvc-1.drawio.svg" alt="dvc-1.drawio.svg" class="org-svg" />
 </p>
 </div>
@@ -97,7 +97,7 @@ Let us figure out a solution to these pathologies!
 <section id="slide-2-2">
 <h3 id="2-2"><span class="section-number-3">2.2.</span> Step two</h3>
 
-<div id="orge31b31c" class="figure">
+<div id="orga3866f9" class="figure">
 <p><img src="./figures/dvc-2.drawio.svg" alt="dvc-2.drawio.svg" class="org-svg" />
 </p>
 </div>
@@ -106,7 +106,7 @@ Let us figure out a solution to these pathologies!
 <section id="slide-2-3">
 <h3 id="2-3"><span class="section-number-3">2.3.</span> Step three</h3>
 
-<div id="org7fb9895" class="figure">
+<div id="org4451a50" class="figure">
 <p><img src="./figures/dvc-3.drawio.svg" alt="dvc-3.drawio.svg" class="org-svg" />
 </p>
 </div>
@@ -115,7 +115,7 @@ Let us figure out a solution to these pathologies!
 <section id="slide-2-4">
 <h3 id="2-4"><span class="section-number-3">2.4.</span> We just invented DVC!</h3>
 
-<div id="org85dbd1b" class="figure">
+<div id="org04fc562" class="figure">
 <p><img src="https://dvc.org/static/9cccd49a995845bdc6466caa17ad3bad/ab90f/model-sharing-digram.png" alt="model-sharing-digram.png" />
 </p>
 </div>
@@ -153,7 +153,7 @@ Let us figure out a solution to these pathologies!
 <pre class="src src-bash">dvc add model.pkl                 <span style="color: #6f7787;"># </span><span style="color: #6f7787;">create 'pointer files'</span>
 dvc push                          <span style="color: #6f7787;"># </span><span style="color: #6f7787;">push artefacts to remote storage</span>
 <span style="color: #8FBCBB;">git</span> add model.pkl.dvc             <span style="color: #6f7787;"># </span><span style="color: #6f7787;">add pointer file to </span><span style="color: #6f7787;">git</span>
-<span style="color: #8FBCBB;">git</span> commit -m <span style="color: #A3BE8C;">'&#128293;lit model&#128293;&#128076;'</span>   <span style="color: #6f7787;"># </span><span style="color: #6f7787;">business as usual</span>
+<span style="color: #8FBCBB;">git</span> commit -m <span style="color: #A3BE8C;">'&#128293;lit model&#128293;&#128076;'</span>    <span style="color: #6f7787;"># </span><span style="color: #6f7787;">business as usual</span>
 <span style="color: #8FBCBB;">git</span> push
 </pre>
 </div>
@@ -208,10 +208,14 @@ Nice! But what if we have dependencies between artefacts?
 <h3 id="3-6"><span class="section-number-3">3.6.</span> Pipeline run</h3>
 <div class="org-src-container">
 
-<pre class="src src-bash">dvc repro <span style="color: #6f7787;"># </span><span style="color: #6f7787;">reproduces results of the pipeline</span>
+<pre class="src src-bash">dvc repro                         <span style="color: #6f7787;"># </span><span style="color: #6f7787;">reproduces results of the pipeline</span>
+dvc add lock.dvc                  <span style="color: #6f7787;"># </span><span style="color: #6f7787;">add 'pipeline pointer file'</span>
+dvc push                          <span style="color: #6f7787;"># </span><span style="color: #6f7787;">push artefacts to remote storage</span>
+<span style="color: #8FBCBB;">git</span> add model.pkl.dvc             <span style="color: #6f7787;"># </span><span style="color: #6f7787;">add pointer file to </span><span style="color: #6f7787;">git</span>
+<span style="color: #8FBCBB;">git</span> commit -m <span style="color: #A3BE8C;">'&#128293;&#128293;&#128293;&#128293;&#128293;&#128076;'</span>        <span style="color: #6f7787;"># </span><span style="color: #6f7787;">professional etc</span>
+<span style="color: #8FBCBB;">git</span> push
 </pre>
 </div>
-
 
 </section>
 </section>
